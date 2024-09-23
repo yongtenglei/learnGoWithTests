@@ -8,8 +8,11 @@ func walk(x any, fn func(string)) {
 	for i := 0; i < v.NumField(); i++ {
 		field := v.Field(i)
 
-		if field.Kind() == reflect.String {
+		switch field.Kind() {
+		case reflect.String:
 			fn(field.String())
+		case reflect.Struct:
+			walk(field.Interface(), fn)
 		}
 	}
 }
