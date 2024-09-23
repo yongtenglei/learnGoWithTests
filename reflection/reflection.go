@@ -12,7 +12,7 @@ func walk(x any, fn func(string)) {
 	case reflect.Struct:
 		numOfValues = v.NumField()
 		getFieldFunc = v.Field
-	case reflect.Slice:
+	case reflect.Slice, reflect.Array:
 		numOfValues = v.Len()
 		getFieldFunc = v.Index
 	case reflect.String:
