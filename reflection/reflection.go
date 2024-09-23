@@ -13,6 +13,8 @@ func walk(x any, fn func(string)) {
 	var getFieldFunc func(int) reflect.Value
 
 	switch v.Kind() {
+	case reflect.String:
+		fn(v.String())
 	case reflect.Struct:
 		for i := 0; i < v.NumField(); i++ {
 			walkValue(v.Field(i))
@@ -33,8 +35,11 @@ func walk(x any, fn func(string)) {
 				break
 			}
 		}
-	case reflect.String:
-		fn(v.String())
+	case reflect.Func:
+		vFnResult := v.Call(nil)
+		for _, res := range vFnResult {
+			walkValue(res)
+		}
 	}
 
 	for i := 0; i < numOfValues; i++ {
